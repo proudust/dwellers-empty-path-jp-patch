@@ -5,6 +5,40 @@
 
 var JP_Patch = {};
 
+// Load translate file
+JP_Patch.loadTranslateFile = function () {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'js/plugins/JP_Translate.json');
+    xhr.overrideMimeType('application/json');
+    xhr.onload = function () {
+        if (xhr.status < 400) JP_Patch.Translations = JSON.parse(xhr.responseText);
+    };
+    JP_Patch.Translations = null;
+    xhr.send();
+}
+JP_Patch.loadTranslateFile();
+
+// Apply translations to data files
+DataManager.loadDataFile = function (name, src) {
+    var xhr = new XMLHttpRequest();
+    var url = 'data/' + src;
+    xhr.open('GET', url);
+    xhr.overrideMimeType('application/json');
+    xhr.onload = function () {
+        if (xhr.status < 400) {
+            window[name] = JSON.parse(xhr.responseText, function (_, value) {
+                return JP_Patch.Translations[src] && JP_Patch.Translations[src][value] || value;
+            });
+            DataManager.onLoad(window[name]);
+        }
+    };
+    xhr.onerror = this._mapLoader || function () {
+        DataManager._errorUrl = DataManager._errorUrl || url;
+    };
+    window[name] = null;
+    xhr.send();
+};
+
 // Change font outline color
 JP_Patch.Window_Base_resetFontSettings = Window_Base.prototype.resetFontSettings;
 Window_Base.prototype.resetFontSettings = function () {
