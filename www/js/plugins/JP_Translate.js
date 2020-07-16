@@ -18,6 +18,21 @@ JP_Patch.loadTranslateFile = function () {
 }
 JP_Patch.loadTranslateFile();
 
+JP_Patch.translate = function (src, json) {
+    if (!(src in JP_Patch.Translations)) return json;
+
+    var transFile = JP_Patch.Translations[src];
+    for (var key in transFile) {
+        var transDialogs = typeof transFile[key] === 'string' ? [transFile[key]] : transFile[key];
+        json = transDialogs.reduce((json, curr) => {
+            var original = '"' + key.replace(/\\/g, '\\\\') + '"';
+            var translation = '"' + curr.replace(/\\/g, '\\\\') + '"';
+            return json.replace(original, translation);
+        }, json);
+    }
+    return json;
+}
+
 // Apply translations to data files
 DataManager.loadDataFile = function (name, src) {
     var xhr = new XMLHttpRequest();
@@ -26,9 +41,8 @@ DataManager.loadDataFile = function (name, src) {
     xhr.overrideMimeType('application/json');
     xhr.onload = function () {
         if (xhr.status < 400) {
-            window[name] = JSON.parse(xhr.responseText, function (_, value) {
-                return JP_Patch.Translations[src] && JP_Patch.Translations[src][value] || value;
-            });
+            var json = JP_Patch.translate(src, xhr.responseText);
+            window[name] = JSON.parse(json);
             DataManager.onLoad(window[name]);
         }
     };
