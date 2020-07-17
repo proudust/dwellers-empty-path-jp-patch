@@ -13,24 +13,43 @@ JP_Patch.loadTranslateFile = function () {
     xhr.onload = function () {
         if (xhr.status < 400) JP_Patch.Translations = JSON.parse(xhr.responseText);
     };
-    JP_Patch.Translations = null;
     xhr.send();
 }
+JP_Patch.Translations = {};
 JP_Patch.loadTranslateFile();
 
-JP_Patch.translate = function (src, json) {
-    if (!(src in JP_Patch.Translations)) return json;
+// apply translation to json object
+JP_Patch.translateObject = function (object, jsonPaths, original, translation) {
+    if (jsonPaths.length) {
+        object[jsonPaths[0]] = JP_Patch.translateObject(
+            object[jsonPaths[0]],
+            jsonPaths.slice(1),
+            original,
+            translation
+        );
+        return object;
+    }
+
+    for (var key in object) {
+        if (object[key] === original) object[key] = translation;
+        else if (typeof object[key] === "object" || typeof object[key] === "array") {
+            object[key] = JP_Patch.translateObject(object[key], jsonPaths, original, translation);
+        }
+    }
+    return object;
+}
+
+JP_Patch.translate = function (src, object) {
+    if (!(src in JP_Patch.Translations)) return object;
 
     var transFile = JP_Patch.Translations[src];
-    for (var key in transFile) {
-        var transDialogs = typeof transFile[key] === 'string' ? [transFile[key]] : transFile[key];
-        json = transDialogs.reduce((json, curr) => {
-            var original = '"' + key.replace(/\\/g, '\\\\') + '"';
-            var translation = '"' + curr.replace(/\\/g, '\\\\') + '"';
-            return json.replace(original, translation);
-        }, json);
+    for (var pathString in transFile) {
+        var path = pathString.match(/\w+/g) || [];
+        for (var original in transFile[pathString]) {
+            object = JP_Patch.translateObject(object, path, original, transFile[pathString][original]);
+        }
     }
-    return json;
+    return object;
 }
 
 // Apply translations to data files
@@ -41,8 +60,7 @@ DataManager.loadDataFile = function (name, src) {
     xhr.overrideMimeType('application/json');
     xhr.onload = function () {
         if (xhr.status < 400) {
-            var json = JP_Patch.translate(src, xhr.responseText);
-            window[name] = JSON.parse(json);
+            window[name] = JP_Patch.translate(src, JSON.parse(xhr.responseText));
             DataManager.onLoad(window[name]);
         }
     };
