@@ -6,16 +6,21 @@
 var JP_Patch = {};
 
 // Load translate file
-JP_Patch.loadTranslateFile = function () {
+JP_Patch.loadTranslateFile = function (callback) {
+    if (JP_Patch.Translations) {
+        if (typeof callback === "function") callback();
+        return;
+    }
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'js/plugins/JP_Translate.json');
     xhr.overrideMimeType('application/json');
     xhr.onload = function () {
         if (xhr.status < 400) JP_Patch.Translations = JSON.parse(xhr.responseText);
+        if (typeof callback === "function") callback();
     };
     xhr.send();
 }
-JP_Patch.Translations = {};
+JP_Patch.Translations = undefined;
 JP_Patch.loadTranslateFile();
 
 // apply translation to json object
@@ -40,6 +45,7 @@ JP_Patch.translateObject = function (object, jsonPaths, original, translation) {
 }
 
 JP_Patch.translate = function (src, object) {
+    if (JP_Patch.Translations === undefined) JP_Patch.loadTranslateFile();
     if (!(src in JP_Patch.Translations)) return object;
 
     var transFile = JP_Patch.Translations[src];
@@ -59,10 +65,12 @@ DataManager.loadDataFile = function (name, src) {
     xhr.open('GET', url);
     xhr.overrideMimeType('application/json');
     xhr.onload = function () {
-        if (xhr.status < 400) {
-            window[name] = JP_Patch.translate(src, JSON.parse(xhr.responseText));
-            DataManager.onLoad(window[name]);
-        }
+        JP_Patch.loadTranslateFile(function () {
+            if (xhr.status < 400) {
+                window[name] = JP_Patch.translate(src, JSON.parse(xhr.responseText));
+                DataManager.onLoad(window[name]);
+            }
+        });
     };
     xhr.onerror = this._mapLoader || function () {
         DataManager._errorUrl = DataManager._errorUrl || url;
