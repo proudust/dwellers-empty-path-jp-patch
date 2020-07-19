@@ -9,7 +9,7 @@
     "bugs": "https://github.com/proudust/dwellers-empty-path-jp-patch/issues",
     "private": true,
     "scripts": {
-        "build": "rimraf dist && tsc && cpy www '!**/*.ts' dist --parents",
+        "build": "rimraf dist && tsc && cpy www '!**/*.ts' dist --parents && cpy README.md dist --rename=README.txt",
         "zip": "cd dist && bestzip ../dwellers-empty-path-jp-patch.zip *"
     },
     "devDependencies": {
