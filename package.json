@@ -9,9 +9,11 @@
     "bugs": "https://github.com/proudust/dwellers-empty-path-jp-patch/issues",
     "private": true,
     "scripts": {
-        "build": "rimraf dist && tsc && cpy www '!**/*.ts' dist --parents"
+        "build": "rimraf dist && tsc && cpy www '!**/*.ts' dist --parents",
+        "zip": "cd dist && bestzip ../dwellers-empty-path-jp-patch.zip *"
     },
     "devDependencies": {
+        "bestzip": "^2.1.5",
         "cpy-cli": "^3.1.1",
         "rimraf": "^3.0.2",
         "rpgmakermv_typescript_dts": "^1.5.2",

@@ -1,0 +1,58 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js 13
+        uses: actions/setup-node@v1
+
+      - name: Use npm cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-${{ env.cache-name }}-
+            ${{ runner.os }}-npm-
+            ${{ runner.os }}-
+
+      - name: Restore node modules
+        run: npm ci
+
+      - name: Build
+        run: npm run build && npm run zip
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Dweller's Empty Path JP alpha
+          path: dist
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ver${{ github.ref }}
+          draft: true
+
+      - name: Upload Release Asset
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dwellers-empty-path-jp-patch.zip
+          asset_name: dwellers-empty-path-jp-patch-v${{ github.ref }}.zip
+          asset_content_type: application/zip
