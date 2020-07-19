@@ -1516,11 +1516,11 @@
             "in town.": "",
             "It's bright and sunny out.": "外は明るくていいお天気。"
         },
-        ".events[5].pages[0].list[9]": {
-            "I haven't even left the room ": "まだ部屋を",
-            "yet...": "出てもいないんだけど..."
+        ".events[5].pages[0].list[9:11]": {
+            "I haven't even left the room ": "まだ部屋を出てもいないんだけど..",
+            "yet...": ""
         },
-        ".events[5].pages[0].list[47]": {
+        ".events[5].pages[0].list[47:51]": {
             "Of course...\\.\\.": "もちろん...\\.\\.",
             "I haven't even left the room ": "まだ部屋を出てもいないんだけど。",
             "yet.": ""
@@ -2014,6 +2014,11 @@
             "\\SE[11]Take care.\\SE[1]": "\\SE[11]気をつけていきな!\\SE[1]"
         }
     },
+    "Map064.json": {
+        ".": {
+            "\\SE[11]Take care.\\SE[1]": "\\SE[11]気をつけていきな!\\SE[1]"
+        }
+    },
     "Map067.json": {
         ".": {
             "\\SE[6]I trust you won't tell anyone.\\SE[1]": "\\SE[6]くれぐれもご内密にお願いしますよ。\\SE[1]",
@@ -2022,13 +2027,13 @@
             "\\SE[1]Hi... Uh...": "\\SE[1]はい... あの...",
             "Claire wanted to pick up ": "クレアが注文したものを受け取りに来たのですが...",
             "an order from you...": "",
-            "Ahh.\\.\\..\\.\\..\\.\\. I see, one moment.": "あー.\\.\\..\\.\\..\\.\\. なるほど、少し時間をいただけますか。",
+            "Ahh.\\.\\..\\.\\..\\.\\. I see, one moment.": "あー.\\.\\..\\.\\..\\.\\. なるほど、少しお時間いただけますか。",
             "\\SE[6]Thank you for waiting. Here's her ": "\\SE[6]お待たせしました。 これは注文の品です。",
             "order.": "",
             "\\SE[1]Thank you...": "\\SE[1]ありがとう...",
             "\\SE[6]I trust if you know Claire, you'll": "\\SE[6]クレアとお知り合いなら分かっているでしょうが、この件はくれぐれもご内密にお願いしますよ?",
             "know to keep this a secret, yes?": "",
-            "\\SE[1]You mean... that you sell": "\\SE[1]つまり... これをあなたがクレアに売ったということですか..?",
+            "\\SE[1]You mean... that you sell": "\\SE[1]つまり... あなたがこれをクレアに売ったということをですか..?",
             "these items..?": "",
             "Yeah... No worries.": "はい... ご心配なく。",
             "(This situation is a little...)": "(何このやり取り...)",
@@ -2053,8 +2058,8 @@
             "I like to look at your works": "剣は使えなくても、鍛冶屋さんの武器を見るのは好きだから。",
             "even if I can't use them.": "",
             "They all look so impressive.": "どれを見ても惚れ惚れしちゃう。",
-            "\\SE[8]Eh!\\.\\. Look all ye want.\\.\\.": "\\SE[8]ハッ!\\.\\. 好きなだけ見ていくといい。\\.\\.",
-            "Just know none o' them are fer ye!\\SE[1]": "お前に扱える代物はひとつもないがな!\\SE[1]\"",
+            "\\SE[8]Eh!\\.\\. Look all ye want.\\.\\.": "\\SE[8]ハッ!\\.\\. 好きなだけ見るがいいさ。\\.\\.",
+            "Just know none o' them are fer ye!\\SE[1]": "お前に売る代物はひとつもないがな!\\SE[1]\"",
             "What a fantastic sword.": "とても素敵な剣。",
             "Kind of makes me wish I": "ぼくに使えたら良かったんだけど...",
             "knew how to use them...": "",
@@ -2117,6 +2122,45 @@
             "This bed is very comfy.": "とても気持ちよさそうなベッド。"
         }
     },
+    "Map072.json": {
+        ".": {
+            "********Misuse of Magic********": "****禁術について****",
+            "                Witchcraft": "",
+            "While magic is a subject with": "魔法は不可能を可能する無限のチカラを秘めている一方で、予測不可能な危険性や完全には解明されていない領域を孕んでいます。",
+            "endless possibilities to create and ": "",
+            "perform the impossible,": "",
+            "To avoid severe consequence and": "一般人へ危険が及ばないように、そのような魔法は使うことが禁じられています。",
+            "danger to the general populace,": "",
+            "such crafts are forbidden.": "",
+            "Witchcraft is a highly forbidden": "その中でも特に厳しく取り締まられているものが禁術です。",
+            "practice.": "",
+            "It dives into realms beyond ": "禁術は人智を超えた領域へと足を踏み入れた魔法です。",
+            "mortal comprehension,": "",
+            "With high consequence and risk to": "たとえ正しい手順で術や儀式を行ったとしても、禁術には高いリスクが伴います。",
+            "every spell or ritual performed, ": "",
+            "even the fully perfected ones.": "",
+            "Before its ban, there were many": "禁止される以前には、 幾人もの人々がその無限の可能性を信じ、研究を試みました。",
+            "who saw its endless possibilities": "",
+            "and attempted its studies.": "",
+            "However, the results of people's": "しかし、その研究が生み出したものは、混沌と数え切れないほどの死人でした。",
+            "endeavors were catostrophic and ": "",
+            "have caused countless deaths.": "",
+            "As the risk outweighed its promise, ": "得られる恩恵よりも危険性が勝ると判断され、多くの国で禁術の研究は禁止されています。",
+            "many kingdoms have deemed it too": "",
+            "dangerous to pursue its study.": "",
+            "There's a lot of textbooks": "たくさんの教科書や参考書。",
+            "and learning materials here.": "",
+            "Whenever Claire wants ": "クレアが何か欲しがったときは、いつもここから選んでくるんだよね。",
+            "something,\\.\\. I usually pick": "",
+            "it up for her here.": "",
+            ".\\..\\.I wish she didn't incur all": ".\\..\\.クレアの延滞料がぼくに請求されなければいいんだけど。",
+            "the late fees under my name.": "",
+            "\\SE[10]Do you have any favorite books?": "\\SE[10]お気に入りの本はある?",
+            "I personally like heavy fantasy": "私はね、ファンタジー長編や神話か好き!",
+            "and myths!": "",
+            "Romance too!\\SE[1]": "あと、恋愛小説も!\\SE[1]"
+        }
+    },
     "Map075.json": {
         ".": {
             "A complex looking map..": "ごちゃごちゃしてる海図...",
@@ -2164,7 +2208,11 @@
             " Options": "   オプション",
             "   Start": "    スタート",
             "Continue": " コンティニュー",
+            "A.Dash": "自動ダッシュ",
+            "BGM": "ＢＧＭ音量",
+            "BGS": "ＢＧＳ音量",
             "File": "ファイル",
+            "Load which file?": "どのファイルをロードしますか？",
             "Save to which file?": "どのファイルにセーブしますか？"
         }
     }
