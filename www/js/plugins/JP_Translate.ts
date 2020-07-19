@@ -3,7 +3,7 @@
  * @author Proudust
  */
 
-var JP_Patch = {};
+var JP_Patch = {} as any;
 
 // Load translate file
 JP_Patch.loadTranslateFile = function (callback) {
@@ -37,7 +37,7 @@ JP_Patch.translateObject = function (object, jsonPaths, original, translation) {
 
     for (var key in object) {
         if (object[key] === original) object[key] = translation;
-        else if (typeof object[key] === "object" || typeof object[key] === "array") {
+        else if (typeof object[key] === "object") {
             object[key] = JP_Patch.translateObject(object[key], jsonPaths, original, translation);
         }
     }

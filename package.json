@@ -1,0 +1,20 @@
+{
+    "name": "dwellers-empty-path-jp-patch",
+    "version": "0.1.0",
+    "description": "Dweller’s Empty Path Unofficial Japanese translate patch",
+    "author": "Proudust <proudust@gmail.com>",
+    "license": "MIT",
+    "repository": "github:proudust/dwellers-empty-path-jp-patch",
+    "homepage": "https://github.com/proudust/dwellers-empty-path-jp-patch#readme",
+    "bugs": "https://github.com/proudust/dwellers-empty-path-jp-patch/issues",
+    "private": true,
+    "scripts": {
+        "build": "rimraf dist && tsc && cpy www '!**/*.ts' dist --parents"
+    },
+    "devDependencies": {
+        "cpy-cli": "^3.1.1",
+        "rimraf": "^3.0.2",
+        "rpgmakermv_typescript_dts": "^1.5.2",
+        "typescript": "^3.9.7"
+    }
+}

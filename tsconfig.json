@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "outDir": "dist/www/js",
+        "lib": [
+            "es5",
+            "es2015.promise"
+        ],
+        "types": [
+            "rpgmakermv_typescript_dts"
+        ]
+    },
+    "include": [
+        "www/js"
+    ]
+}
