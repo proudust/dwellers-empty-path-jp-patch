@@ -1,6 +1,17 @@
-/**
- * @file Dweller's Empty Path Japanese translate patch
- * @author Proudust
+/*:
+ * @plugindesc Dweller's Empty Path Japanese translate patch
+ * @author Proudust (Twitter@Proudust)
+ * @version 0.1.0
+ *
+ * @link https://github.com/proudust/dwellers-empty-path-jp-patch
+ */
+
+/*:ja
+ * @plugindesc Dweller's Empty Path 日本語化パッチ
+ * @author Proudust (Twitter@Proudust)
+ * @version 0.1.0
+
+ * @link https://github.com/proudust/dwellers-empty-path-jp-patch
  */
 
 var JP_Patch = {} as any;
