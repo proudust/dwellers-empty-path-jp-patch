@@ -14,7 +14,30 @@
  * @link https://github.com/proudust/dwellers-empty-path-jp-patch
  */
 
-var JP_Patch = {} as any;
+var JP_Patch = {} as JP_Patch;
+
+//=================================================================================================
+// JSON data translate
+//=================================================================================================
+
+interface Translations {
+    [fileName: string]: {
+        [jsonPath: string]: {
+            [original: string]: string;
+        }
+    };
+}
+
+interface DataJson {
+    [key: string]: string | DataJson;
+}
+
+interface JP_Patch {
+    Translations?: Translations;
+    loadTranslateFile(callback?: () => void): void;
+    translateObject(object: DataJson, jsonPaths: string[], original, translation: string): DataJson;
+    translate(src: string, object: DataJson): DataJson;
+}
 
 // Load translate file
 JP_Patch.loadTranslateFile = function (callback) {
@@ -38,7 +61,7 @@ JP_Patch.loadTranslateFile();
 JP_Patch.translateObject = function (object, jsonPaths, original, translation) {
     if (jsonPaths.length) {
         object[jsonPaths[0]] = JP_Patch.translateObject(
-            object[jsonPaths[0]],
+            object[jsonPaths[0]] as DataJson,
             jsonPaths.slice(1),
             original,
             translation
@@ -49,7 +72,7 @@ JP_Patch.translateObject = function (object, jsonPaths, original, translation) {
     for (var key in object) {
         if (object[key] === original) object[key] = translation;
         else if (typeof object[key] === "object") {
-            object[key] = JP_Patch.translateObject(object[key], jsonPaths, original, translation);
+            object[key] = JP_Patch.translateObject(object[key] as DataJson, jsonPaths, original, translation);
         }
     }
     return object;
@@ -89,6 +112,16 @@ DataManager.loadDataFile = function (name, src) {
     window[name] = null;
     xhr.send();
 };
+
+//=================================================================================================
+// Japanese font setting
+//=================================================================================================
+
+interface JP_Patch {
+    Bitmap_drawText: Bitmap['drawText'];
+    Bitmap_measureTextWidth: Bitmap['measureTextWidth'];
+    Window_Base_resetFontSettings: Window_Base['resetFontSettings'];
+}
 
 // Change font outline color
 JP_Patch.Window_Base_resetFontSettings = Window_Base.prototype.resetFontSettings;
