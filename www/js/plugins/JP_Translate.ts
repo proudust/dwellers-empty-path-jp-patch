@@ -24,7 +24,7 @@ interface Translations {
     [fileName: string]: {
         [jsonPath: string]: {
             [original: string]: string;
-        }
+        };
     };
 }
 
@@ -42,7 +42,7 @@ interface JP_Patch {
 // Load translate file
 JP_Patch.loadTranslateFile = function (callback) {
     if (JP_Patch.Translations) {
-        if (typeof callback === "function") callback();
+        if (typeof callback === 'function') callback();
         return;
     }
     var xhr = new XMLHttpRequest();
@@ -50,10 +50,10 @@ JP_Patch.loadTranslateFile = function (callback) {
     xhr.overrideMimeType('application/json');
     xhr.onload = function () {
         if (xhr.status < 400) JP_Patch.Translations = JSON.parse(xhr.responseText);
-        if (typeof callback === "function") callback();
+        if (typeof callback === 'function') callback();
     };
     xhr.send();
-}
+};
 JP_Patch.Translations = undefined;
 JP_Patch.loadTranslateFile();
 
@@ -64,19 +64,24 @@ JP_Patch.translateObject = function (object, jsonPaths, original, translation) {
             object[jsonPaths[0]] as DataJson,
             jsonPaths.slice(1),
             original,
-            translation
+            translation,
         );
         return object;
     }
 
     for (var key in object) {
         if (object[key] === original) object[key] = translation;
-        else if (typeof object[key] === "object") {
-            object[key] = JP_Patch.translateObject(object[key] as DataJson, jsonPaths, original, translation);
+        else if (typeof object[key] === 'object') {
+            object[key] = JP_Patch.translateObject(
+                object[key] as DataJson,
+                jsonPaths,
+                original,
+                translation,
+            );
         }
     }
     return object;
-}
+};
 
 JP_Patch.translate = function (src, object) {
     if (JP_Patch.Translations === undefined) JP_Patch.loadTranslateFile();
@@ -86,11 +91,16 @@ JP_Patch.translate = function (src, object) {
     for (var pathString in transFile) {
         var path = pathString.match(/\w+/g) || [];
         for (var original in transFile[pathString]) {
-            object = JP_Patch.translateObject(object, path, original, transFile[pathString][original]);
+            object = JP_Patch.translateObject(
+                object,
+                path,
+                original,
+                transFile[pathString][original],
+            );
         }
     }
     return object;
-}
+};
 
 // Apply translations to data files
 DataManager.loadDataFile = function (name, src) {
@@ -106,9 +116,11 @@ DataManager.loadDataFile = function (name, src) {
             }
         });
     };
-    xhr.onerror = this._mapLoader || function () {
-        DataManager._errorUrl = DataManager._errorUrl || url;
-    };
+    xhr.onerror =
+        this._mapLoader ||
+        function () {
+            DataManager._errorUrl = DataManager._errorUrl || url;
+        };
     window[name] = null;
     xhr.send();
 };
