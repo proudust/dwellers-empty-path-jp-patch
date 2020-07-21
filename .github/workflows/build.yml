@@ -10,7 +10,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup Node.js 13
+      - name: Setup Node.js
         uses: actions/setup-node@v1
 
       - name: Use npm cache
@@ -26,13 +26,16 @@ jobs:
       - name: Restore node modules
         run: npm ci
 
+      - name: Lint
+        run: npm run lint:ci
+
       - name: Build
         run: npm run build && npm run zip
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v2
         with:
-          name: Dweller's Empty Path JP alpha
+          name: Dwellers_Empty_Path_JP_${{ github.sha }}.zip
           path: dist
 
       - name: Create Release
@@ -54,5 +57,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./dwellers-empty-path-jp-patch.zip
-          asset_name: dwellers-empty-path-jp-patch-v${{ github.ref }}.zip
+          asset_name: Dwellers_Empty_Path_JP_v${{ github.ref }}.zip
           asset_content_type: application/zip

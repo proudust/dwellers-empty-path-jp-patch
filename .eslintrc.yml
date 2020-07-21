@@ -1,0 +1,35 @@
+root: true
+
+extends:
+  - eslint:recommended
+  - plugin:prettier/recommended
+
+plugins:
+  - prettier
+
+rules:
+  prettier/prettier:
+    - error
+    - arrowParens: avoid
+      printWidth: 100
+      singleQuote: true
+      trailingComma: all
+
+overrides:
+  - files: ["**/*.ts"]
+    parser: "@typescript-eslint/parser"
+    parserOptions:
+      ecmaVersion: 5
+
+    extends:
+      - plugin:@typescript-eslint/recommended
+      - prettier/@typescript-eslint
+    plugins:
+      - "@typescript-eslint"
+
+    rules:
+      no-var: "off"
+
+      "@typescript-eslint/explicit-function-return-type":
+        - warn
+        - allowExpressions: true
