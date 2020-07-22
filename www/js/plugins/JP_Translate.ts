@@ -31,15 +31,15 @@ interface Translations {
     };
 }
 
+type WalkCallback = (jsonPath: string, value: string) => IAnyDataValue;
+
 interface JP_Patch {
     Translations?: Translations;
     loadTranslateFile(callback?: () => void): void;
-    translateObject(
-        object: IAnyData,
-        jsonPaths: string[],
-        original: string,
-        translation: string,
-    ): IAnyData;
+    walk(object: IAnyData, callback: WalkCallback): IAnyData;
+    walkArray(array: IAnyDataValue[], jsonPath: string, callback: WalkCallback): IAnyDataValue[];
+    walkObject(object: IAnyDataObject, jsonPath: string, callback: WalkCallback): IAnyDataObject;
+    includeJsonPath(actual: string, expected: string): boolean;
     translate(src: string, object: IAnyData): IAnyData;
 }
 
@@ -60,31 +60,57 @@ JP_Patch.loadTranslateFile = function (callback) {
 };
 JP_Patch.Translations = undefined;
 
-// apply translation to json object
-JP_Patch.translateObject = function (object, jsonPaths, original, translation) {
-    if (!object) return object;
-    if (jsonPaths.length) {
-        (object as any)[jsonPaths[0]] = JP_Patch.translateObject(
-            (object as any)[jsonPaths[0]] as IAnyData,
-            jsonPaths.slice(1),
-            original,
-            translation,
-        );
-        return object;
-    }
+JP_Patch.walk = function (object, callback) {
+    return Array.isArray(object)
+        ? JP_Patch.walkArray(object as IAnyDataValue[], '.', callback)
+        : JP_Patch.walkObject(object as IAnyDataObject, '', callback);
+};
 
+JP_Patch.walkArray = function (array, jsonPath, callback) {
+    for (var i = 0; i < array.length; i++) {
+        var value = array[i];
+        if (typeof value === 'string') {
+            array[i] = callback(jsonPath + '[' + i + ']', value);
+        } else if (Array.isArray(value)) {
+            array[i] = JP_Patch.walkArray(value, jsonPath + '[' + i + ']', callback);
+        } else if (typeof value === 'object' && value !== null) {
+            array[i] = JP_Patch.walkObject(value, jsonPath + '[' + i + ']', callback);
+        }
+    }
+    return array;
+};
+
+JP_Patch.walkObject = function (object, jsonPath, callback) {
     for (var key in object) {
-        if ((object as any)[key] === original) (object as any)[key] = translation;
-        else if (typeof (object as any)[key] === 'object') {
-            (object as any)[key] = JP_Patch.translateObject(
-                (object as any)[key] as IAnyData,
-                jsonPaths,
-                original,
-                translation,
-            );
+        var value = object[key];
+        if (typeof value === 'string') {
+            object[key] = callback(jsonPath + '.' + key, value);
+        } else if (Array.isArray(value)) {
+            object[key] = JP_Patch.walkArray(value, jsonPath + '.' + key, callback);
+        } else if (typeof value === 'object' && value !== null) {
+            object[key] = JP_Patch.walkObject(value, jsonPath + '.' + key, callback);
         }
     }
     return object;
+};
+
+JP_Patch.includeJsonPath = function (actual, expected) {
+    var actualPaths = actual.match(/(\.\w+|\[\d+\]|\[\d+:\d+\])/g) || [];
+    var expectedPaths = expected.match(/(\.\w+|\[\d+\]|\[\d+:\d+\])/g) || [];
+    path: for (var i = 0; i < expectedPaths.length; i++) {
+        if (actualPaths[i] === expectedPaths[i]) continue path;
+        else if (expectedPaths[i].startsWith('.')) return false;
+        else if (!expectedPaths[i].includes(':')) return false;
+        else {
+            var actn = Number(actualPaths[i].slice(1, -1));
+            var pair = (expectedPaths[i].match(/\d+/g) || []).map(Number);
+            var start = Math.min.apply(undefined, pair);
+            var end = Math.max.apply(undefined, pair);
+            for (var j = start; j < end; j++) if (j === actn) continue path;
+            return false;
+        }
+    }
+    return true;
 };
 
 JP_Patch.translate = function (src, object) {
@@ -92,18 +118,16 @@ JP_Patch.translate = function (src, object) {
     if (!(src in JP_Patch.Translations)) return object;
 
     var transFile = JP_Patch.Translations[src];
-    for (var pathString in transFile) {
-        var path = pathString.match(/\w+/g) || [];
-        for (var original in transFile[pathString]) {
-            object = JP_Patch.translateObject(
-                object,
-                path,
-                original,
-                transFile[pathString][original],
-            );
+    return JP_Patch.walk(object, (jsonPath, value) => {
+        for (var targetPath in transFile) {
+            for (var original in transFile[targetPath]) {
+                if (value === original && JP_Patch.includeJsonPath(jsonPath, targetPath)) {
+                    return transFile[targetPath][original];
+                }
+            }
         }
-    }
-    return object;
+        return value;
+    });
 };
 
 // Apply translations to data files
