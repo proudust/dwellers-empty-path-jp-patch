@@ -3,6 +3,7 @@
         "module": "commonjs",
         "target": "es5",
         "outDir": "dist/www/js",
+        "strict": true,
         "lib": [
             "es5",
             "es2015.promise"

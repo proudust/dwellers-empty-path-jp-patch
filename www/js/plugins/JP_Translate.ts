@@ -28,15 +28,16 @@ interface Translations {
     };
 }
 
-interface DataJson {
-    [key: string]: string | DataJson;
-}
-
 interface JP_Patch {
     Translations?: Translations;
     loadTranslateFile(callback?: () => void): void;
-    translateObject(object: DataJson, jsonPaths: string[], original, translation: string): DataJson;
-    translate(src: string, object: DataJson): DataJson;
+    translateObject(
+        object: IAnyData,
+        jsonPaths: string[],
+        original: string,
+        translation: string,
+    ): IAnyData;
+    translate(src: string, object: IAnyData): IAnyData;
 }
 
 // Load translate file
@@ -55,13 +56,13 @@ JP_Patch.loadTranslateFile = function (callback) {
     xhr.send();
 };
 JP_Patch.Translations = undefined;
-JP_Patch.loadTranslateFile();
 
 // apply translation to json object
 JP_Patch.translateObject = function (object, jsonPaths, original, translation) {
+    if (!object) return object;
     if (jsonPaths.length) {
-        object[jsonPaths[0]] = JP_Patch.translateObject(
-            object[jsonPaths[0]] as DataJson,
+        (object as any)[jsonPaths[0]] = JP_Patch.translateObject(
+            (object as any)[jsonPaths[0]] as IAnyData,
             jsonPaths.slice(1),
             original,
             translation,
@@ -70,10 +71,10 @@ JP_Patch.translateObject = function (object, jsonPaths, original, translation) {
     }
 
     for (var key in object) {
-        if (object[key] === original) object[key] = translation;
-        else if (typeof object[key] === 'object') {
-            object[key] = JP_Patch.translateObject(
-                object[key] as DataJson,
+        if ((object as any)[key] === original) (object as any)[key] = translation;
+        else if (typeof (object as any)[key] === 'object') {
+            (object as any)[key] = JP_Patch.translateObject(
+                (object as any)[key] as IAnyData,
                 jsonPaths,
                 original,
                 translation,
@@ -84,7 +85,7 @@ JP_Patch.translateObject = function (object, jsonPaths, original, translation) {
 };
 
 JP_Patch.translate = function (src, object) {
-    if (JP_Patch.Translations === undefined) JP_Patch.loadTranslateFile();
+    if (!JP_Patch.Translations) throw new Error('translation has not been loaded.');
     if (!(src in JP_Patch.Translations)) return object;
 
     var transFile = JP_Patch.Translations[src];
@@ -103,27 +104,30 @@ JP_Patch.translate = function (src, object) {
 };
 
 // Apply translations to data files
+/* eslint-disable @typescript-eslint/no-explicit-any */
 DataManager.loadDataFile = function (name, src) {
     var xhr = new XMLHttpRequest();
     var url = 'data/' + src;
     xhr.open('GET', url);
     xhr.overrideMimeType('application/json');
     xhr.onload = function () {
-        JP_Patch.loadTranslateFile(function () {
-            if (xhr.status < 400) {
-                window[name] = JP_Patch.translate(src, JSON.parse(xhr.responseText));
-                DataManager.onLoad(window[name]);
-            }
-        });
+        if (xhr.status < 400) {
+            var object = JSON.parse(xhr.responseText);
+            JP_Patch.loadTranslateFile(function () {
+                (window as any)[name] = JP_Patch.translate(src, object);
+                DataManager.onLoad((window as any)[name] as IDataActor[]);
+            });
+        }
     };
     xhr.onerror =
         this._mapLoader ||
         function () {
             DataManager._errorUrl = DataManager._errorUrl || url;
         };
-    window[name] = null;
+    (window as any)[name] = null;
     xhr.send();
 };
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 //=================================================================================================
 // Japanese font setting
