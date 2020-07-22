@@ -1,5 +1,3 @@
-declare var $plugins: IDataPlugin[];
-
 /**
  * If you want to disable the Japanese translate patch, change "enableJpPatch" value to false.
  * 日本語化パッチを無効化したい場合、enableJpPatch を false に変更してください。

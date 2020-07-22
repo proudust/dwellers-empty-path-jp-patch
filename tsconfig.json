@@ -7,11 +7,9 @@
             "es5",
             "es2015.promise"
         ],
-        "types": [
-            "rpgmakermv_typescript_dts"
-        ]
     },
     "include": [
-        "www/js"
+        "typings",
+        "www/js",
     ]
 }
