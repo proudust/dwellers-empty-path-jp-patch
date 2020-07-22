@@ -16,6 +16,9 @@
 
 var JP_Patch = {} as JP_Patch;
 
+// If Jest environment, explicitly assign to global variable.
+if (global && global.test) global.JP_Patch = JP_Patch;
+
 //=================================================================================================
 // JSON data translate
 //=================================================================================================
