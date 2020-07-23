@@ -97,18 +97,15 @@ JP_Patch.walkObject = function (object, jsonPath, callback) {
 JP_Patch.includeJsonPath = function (actual, expected) {
     var actualPaths = actual.match(/(\.\w+|\[\d+\]|\[\d+:\d+\])/g) || [];
     var expectedPaths = expected.match(/(\.\w+|\[\d+\]|\[\d+:\d+\])/g) || [];
-    path: for (var i = 0; i < expectedPaths.length; i++) {
-        if (actualPaths[i] === expectedPaths[i]) continue path;
-        else if (expectedPaths[i].startsWith('.')) return false;
-        else if (!expectedPaths[i].includes(':')) return false;
-        else {
-            var actn = Number(actualPaths[i].slice(1, -1));
-            var pair = (expectedPaths[i].match(/\d+/g) || []).map(Number);
-            var start = Math.min.apply(undefined, pair);
-            var end = Math.max.apply(undefined, pair);
-            for (var j = start; j < end; j++) if (j === actn) continue path;
-            return false;
-        }
+    for (var i = 0; i < expectedPaths.length; i++) {
+        if (actualPaths[i] === expectedPaths[i]) continue;
+        if (expectedPaths[i].startsWith('.') || !expectedPaths[i].includes(':')) return false;
+
+        var n = Number(actualPaths[i].slice(1, -1));
+        var pair = (expectedPaths[i].match(/\d+/g) || []).map(Number);
+        var start = Math.min.apply(undefined, pair);
+        var end = Math.max.apply(undefined, pair);
+        if (n < start || end <= n) return false;
     }
     return true;
 };
