@@ -5,6 +5,7 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
 
     steps:
       - name: Checkout
@@ -19,7 +20,7 @@ jobs:
           path: ~/.npm
           key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-npm-${{ env.cache-name }}-
+            ${{ runner.os }}-npm-${{ env.cache-name }}
             ${{ runner.os }}-npm-
             ${{ runner.os }}-
 
@@ -59,6 +60,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dwellers-empty-path-jp-patch.zip
           asset_name: Dwellers_Empty_Path_JP_v${{ github.ref }}.zip
+          asset_path: ./dwellers-empty-path-jp-patch.zip
           asset_content_type: application/zip
