@@ -15,6 +15,10 @@
 
 4. 起動してタイトルが日本語になっていれば成功です
 
+## 翻訳への参加
+
+翻訳に協力してくださる場合は、[翻訳所](https://docs.google.com/spreadsheets/d/1AyGOT092bPugMgniCWgr-SuQugrUVJRWebKQjOKPU6g/edit#gid=181117629)から匿名で参加できます。
+
 ## 使用フォント
 
 - [PixelMplus](http://itouhiro.hatenablog.com/entry/20130602/font)
