@@ -7,5 +7,7 @@ module.exports = {
         Bitmap: function () {},
         DataManager: function () {},
         Window_Base: Window_Base,
+        Window_ChoiceList: function () {},
+        Yanfly: { Param: { LineHeight: 34 } },
     },
 };
