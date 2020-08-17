@@ -187,3 +187,10 @@ Bitmap.prototype.measureTextWidth = function (text) {
 Window_Base.prototype.normalColor = function () {
     return '#e0f8cf';
 };
+
+declare var Yanfly: { Param: { LineHeight: number } };
+
+// Fix bottom of choice list being cut off
+Window_ChoiceList.prototype.lineHeight = function () {
+    return Yanfly.Param.LineHeight + 6;
+};
