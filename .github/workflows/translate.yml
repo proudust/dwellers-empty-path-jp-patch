@@ -23,9 +23,13 @@ jobs:
       - name: Download translate file
         run: |
           curl -sL -o translations.txt ${{ secrets.TRANSLATE_URL }}
-          base64 -d <translations.txt >translations.zip
-          if [ $? -gt 0 ]; then
-            cat translations.txt
+          base64 -d <translations.txt >translations.zip || result=$?
+          if [ $result -gt 0 ]; then
+            sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/ /g' translations.txt |
+              grep -oP '<div style="[^"]+">.+</div>' |
+              sed -re 's|<[^>]+>||g' |
+              sed -e 's|&quot;|"|g' |
+              echo "::error::$(cat)"
             exit 1
           fi
           unzip -oq translations.zip -d www/js/plugins
