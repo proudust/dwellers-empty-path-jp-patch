@@ -10,8 +10,8 @@
     "private": true,
     "scripts": {
         "build": "rimraf dist && tsc && cpy www '!**/*.ts' dist --parents && cpy README.md dist --rename=README.txt",
-        "lint": "eslint . --fix",
-        "lint:ci": "eslint . --fix",
+        "lint": "prettier --write --ignore-path .eslintignore . && eslint . --fix",
+        "lint:ci": "prettier --check --ignore-path .eslintignore . && eslint .",
         "test": "jest",
         "zip": "cd dist && bestzip ../dwellers-empty-path-jp-patch.zip *"
     },
@@ -23,7 +23,6 @@
         "cpy-cli": "^3.1.1",
         "eslint": "^7.8.1",
         "eslint-config-prettier": "^6.11.0",
-        "eslint-plugin-prettier": "^3.1.4",
         "jest": "^26.4.2",
         "prettier": "^2.1.1",
         "rimraf": "^3.0.2",

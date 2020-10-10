@@ -5,18 +5,7 @@ env:
 
 extends:
   - eslint:recommended
-  - plugin:prettier/recommended
-
-plugins:
   - prettier
-
-rules:
-  prettier/prettier:
-    - error
-    - arrowParens: avoid
-      printWidth: 100
-      singleQuote: true
-      trailingComma: all
 
 overrides:
   - files: ["**/*.ts"]
