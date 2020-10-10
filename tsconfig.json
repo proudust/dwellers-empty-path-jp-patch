@@ -4,13 +4,7 @@
         "target": "es5",
         "outDir": "dist/www/js",
         "strict": true,
-        "lib": [
-            "es5",
-            "es2015.promise"
-        ],
+        "lib": ["es5", "es2015.promise"]
     },
-    "include": [
-        "typings",
-        "www/js",
-    ]
+    "include": ["typings", "www/js"]
 }

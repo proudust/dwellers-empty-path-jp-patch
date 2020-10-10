@@ -3,11 +3,11 @@ name: Update translate files
 on:
   push:
     branches:
-      - "master"
+      - 'master'
   repository_dispatch:
     types: [update_translate]
   schedule:
-    - cron: "0 21 * * *"
+    - cron: '0 21 * * *'
   workflow_dispatch:
 
 jobs:
@@ -39,7 +39,7 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           branch: translate
-          commit-message: ":sparkles: 翻訳の更新"
+          commit-message: ':sparkles: 翻訳の更新'
           author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
           title: 翻訳の更新
           body: |

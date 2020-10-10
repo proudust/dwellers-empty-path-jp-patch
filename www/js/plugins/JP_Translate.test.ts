@@ -27,7 +27,10 @@ describe('JP_Patch.walk', () => {
         JP_Patch.walk(data as IAnyData, (jsonPath, value) => result.push({ jsonPath, value }));
         expect(result).toEqual([
             { jsonPath: '.events[1].name', value: 'EV001' },
-            { jsonPath: '.events[1].pages[0].list[0].parameters[0]', value: 'test' },
+            {
+                jsonPath: '.events[1].pages[0].list[0].parameters[0]',
+                value: 'test',
+            },
         ]);
     });
 });

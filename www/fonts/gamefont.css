@@ -1,6 +1,6 @@
 @font-face {
     font-family: GameFont;
-    src: url("PixelMplus12-Bold.ttf");
+    src: url('PixelMplus12-Bold.ttf');
 }
 
 .IIV::-webkit-media-controls-play-button,
