@@ -1804,8 +1804,8 @@
     },
     "Map032.json": {
         ".": {
-            "\\SE[5]Hope we won't have to": "\\SE[5]いつか刃を交える日が来ないことを願うよ。\\SE[1]",
-            "cross blades one day.\\SE[1]": "",
+            "\\SE[5]Hope we won't have to": "\\SE[5]いつかアンタと刃を交える日が",
+            "cross blades one day.\\SE[1]": "来ないことを願ってるよ。\\SE[1]",
             "So did you have fun ": "オレたちの冒険を",
             "following us on our quest?": "後ろから見ていて楽しかったか？",
             "\\SE[1]W..\\.\\.What do you mean?": "\\SE[1]な..\\.\\.なんのことでしょうか？",
